@@ -1,0 +1,834 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Swapnil Shinde | AI & Data Science Engineer</title>
+    <!-- Google Fonts + Modern Clean Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg-deep: #05050A;
+        --bg-surface: #0C0C16;
+        --bg-card: #11111E;
+        --border-subtle: rgba(72, 187, 255, 0.12);
+        --cyan-glow: #00F0FF;
+        --cyan-dim: rgba(0, 240, 255, 0.15);
+        --violet-accent: #A78BFA;
+        --violet-dim: rgba(167, 139, 250, 0.12);
+        --text-primary: #F1F5F9;
+        --text-secondary: #94A3B8;
+        --text-tertiary: #5B6A8C;
+        --card-hover-border: rgba(0, 240, 255, 0.4);
+    }
+
+    body {
+        background-color: var(--bg-deep);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        line-height: 1.5;
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+    }
+
+    /* Canvas Particle Network Background */
+    #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Glassmorphic Nav */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        backdrop-filter: blur(20px);
+        background: rgba(5, 5, 10, 0.75);
+        border-bottom: 1px solid var(--border-subtle);
+        z-index: 99;
+        padding: 1rem 2rem;
+        transition: all 0.3s;
+    }
+
+    .nav-flex {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-family: 'Syne', sans-serif;
+        font-weight: 800;
+        font-size: 1.5rem;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #fff, var(--cyan-glow));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        transition: 0.2s;
+    }
+
+    .nav-links a:hover {
+        color: var(--cyan-glow);
+    }
+
+    section {
+        position: relative;
+        z-index: 2;
+        padding: 6rem 0;
+    }
+
+    /* Section Headers */
+    .section-chip {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--cyan-glow);
+        background: var(--cyan-dim);
+        padding: 0.25rem 0.9rem;
+        border-radius: 40px;
+        margin-bottom: 1rem;
+        border: 0.5px solid rgba(0, 240, 255, 0.25);
+    }
+
+    .section-title {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+    }
+
+    .section-sub {
+        color: var(--text-secondary);
+        max-width: 560px;
+        margin-bottom: 3rem;
+        font-size: 1rem;
+    }
+
+    /* Hero */
+    .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 3rem;
+        align-items: center;
+        min-height: 90vh;
+    }
+
+    .badge-available {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 60px;
+        padding: 0.4rem 1rem;
+        font-size: 0.75rem;
+        color: var(--cyan-glow);
+        margin-bottom: 1.5rem;
+    }
+
+    .dot-pulse {
+        width: 8px;
+        height: 8px;
+        background: var(--cyan-glow);
+        border-radius: 50%;
+        animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+    h1 {
+        font-family: 'Syne', sans-serif;
+        font-size: clamp(3rem, 7vw, 5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+    }
+    .accent-text {
+        color: var(--cyan-glow);
+    }
+    .hero-desc {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        line-height: 1.7;
+        max-width: 520px;
+        margin: 1.5rem 0 2rem;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    .btn-primary {
+        background: var(--cyan-glow);
+        color: #05050A;
+        padding: 0.7rem 1.8rem;
+        border-radius: 40px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+        box-shadow: 0 0 8px rgba(0,240,255,0.4);
+    }
+    .btn-primary:hover {
+        background: #00d4e6;
+        transform: translateY(-2px);
+    }
+    .btn-outline {
+        background: transparent;
+        border: 1px solid var(--violet-accent);
+        color: var(--violet-accent);
+        padding: 0.7rem 1.8rem;
+        border-radius: 40px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+    .btn-outline:hover {
+        background: var(--violet-dim);
+        border-color: var(--violet-accent);
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 2.5rem;
+        border-top: 1px solid var(--border-subtle);
+        padding-top: 2rem;
+    }
+    .stat-value {
+        font-family: 'Syne', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--cyan-glow);
+    }
+    .stat-label {
+        font-size: 0.7rem;
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .profile-img-wrapper {
+        position: relative;
+        border-radius: 28px;
+        overflow: hidden;
+        border: 1px solid var(--border-subtle);
+        background: var(--bg-surface);
+    }
+    .profile-img-wrapper img {
+        width: 100%;
+        height: 500px;
+        display: block;
+        object-fit: cover;
+        aspect-ratio: 4/5;
+    }
+    .azure-badge {
+        position: absolute;
+        bottom: -0.8rem;
+        left: -0.8rem;
+        background: var(--bg-card);
+        backdrop-filter: blur(8px);
+        padding: 0.6rem 1rem;
+        border-radius: 18px;
+        border: 1px solid var(--border-subtle);
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--cyan-glow);
+    }
+
+    /* Journey Timeline */
+    .journey-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+    .timeline {
+        position: relative;
+        padding-left: 1.6rem;
+        border-left: 2px solid rgba(0, 240, 255, 0.3);
+    }
+    .timeline-item {
+        margin-bottom: 2rem;
+    }
+    .timeline-year {
+        font-size: 0.7rem;
+        color: var(--cyan-glow);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+    }
+    .timeline-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin: 0.2rem 0;
+    }
+    .timeline-score {
+        display: inline-block;
+        background: var(--cyan-dim);
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    /* Project Cards Animation & Style (Trading & Blind Nav) */
+    .project-showcase {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+    .feature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+    .feature-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        padding: 1rem;
+        border-radius: 18px;
+        transition: all 0.25s;
+    }
+    .feature-card:hover {
+        border-color: var(--card-hover-border);
+        background: rgba(17, 17, 30, 0.8);
+    }
+    .terminal-mock {
+        background: #0A0A12;
+        border: 1px solid var(--border-subtle);
+        border-radius: 20px;
+        overflow: hidden;
+    }
+    .terminal-header {
+        background: var(--bg-surface);
+        padding: 0.7rem 1rem;
+        display: flex;
+        gap: 0.5rem;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+    .terminal-body {
+        padding: 1.2rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+    }
+    .code-block {
+        background: #01010A;
+        padding: 0.8rem;
+        border-radius: 12px;
+        color: #A5F3C3;
+    }
+
+    /* Blind navigator card */
+    .blind-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+        margin-top: 1.5rem;
+    }
+    .blind-stat {
+        background: var(--bg-card);
+        padding: 0.8rem;
+        text-align: center;
+        border-radius: 16px;
+    }
+
+    /* Freelance Cards */
+    .freelance-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    .service-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 24px;
+        padding: 1.8rem;
+        transition: 0.25s;
+    }
+    .service-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--violet-accent);
+        box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+    }
+
+    /* Skills Bento Grid */
+    .skills-bento {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+    .skill-category {
+        background: var(--bg-surface);
+        border-radius: 24px;
+        padding: 1.5rem;
+        border: 1px solid var(--border-subtle);
+    }
+    .skill-tag {
+        display: inline-block;
+        background: var(--bg-card);
+        padding: 0.3rem 0.9rem;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        margin: 0.3rem;
+        border: 0.5px solid rgba(255,255,255,0.08);
+    }
+
+    /* Glass Contact Form */
+    .contact-form-card {
+        max-width: 680px;
+        margin: 0 auto;
+        background: rgba(12, 12, 22, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-subtle);
+        border-radius: 32px;
+        padding: 2rem 2.5rem;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    input, select, textarea {
+        width: 100%;
+        background: #0C0C16;
+        border: 1px solid var(--border-subtle);
+        padding: 0.8rem 1rem;
+        border-radius: 16px;
+        color: white;
+        font-family: 'Inter', sans-serif;
+        transition: 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: var(--cyan-glow);
+    }
+    .submit-btn {
+        background: linear-gradient(95deg, var(--cyan-glow), #8b5cf6);
+        border: none;
+        width: 100%;
+        padding: 0.9rem;
+        border-radius: 40px;
+        font-weight: 700;
+        color: #05050A;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+    .success-message {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .social-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    footer {
+        text-align: center;
+        padding: 2rem;
+        border-top: 1px solid var(--border-subtle);
+        font-size: 0.75rem;
+        color: var(--text-tertiary);
+    }
+
+    /* Reveal Animation */
+    .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+        .hero-grid, .journey-grid, .project-showcase, .freelance-grid, .skills-bento {
+        grid-template-columns: 1fr;
+        }
+        .container {
+        padding: 0 1.2rem;
+        }
+        .nav-links {
+        display: none;
+        }
+        .profile-img-wrapper {
+        max-width: 280px;
+        margin: 0 auto;
+        }
+        .hero-stats {
+        flex-wrap: wrap;
+        }
+    }
+    </style>
+    </head>
+    <body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <nav class="navbar">
+    <div class="nav-flex">
+        <div class="logo"><span style="color:#00F0FF;">.</span></div>
+        <ul class="nav-links">
+        <li><a href="#journey">Journey</a></li>
+        <li><a href="#trading-bot">Trading Bot</a></li>
+        <li><a href="#blindnav">BlindNav</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="Swapnil_Shinde.pdf" target="'_blank">Resume</a></li>
+        </ul>
+    </div>
+    </nav>
+
+    <main>
+    <!-- HERO -->
+    <section id="hero">
+        <div class="container">
+        <div class="hero-grid">
+            <div class="hero-left reveal">
+            <div class="badge-available"><span class="dot-pulse"></span> Open to Opportunities</div>
+            <h1>Swapnil <span class="accent-text">Shinde.</span></h1>
+            <div class="hero-desc">AI & Data Science Engineer | Final-year B.Tech building production-grade ML systems, algorithmic trading platforms, and assistive robotics. I turn natural language into code and ideas into intelligent products.</div>
+            <div class="btn-group">
+                <a href="#contact" class="btn-primary">Let’s Talk →</a>
+                <a href="#trading-bot" class="btn-outline">Star Project</a>
+            </div>
+            <div class="hero-stats">
+                <div><div class="stat-value">5+</div><div class="stat-label">Industries</div></div>
+                <div><div class="stat-value">87%</div><div class="stat-label">Model Accuracy</div></div>
+                <div><div class="stat-value">95%</div><div class="stat-label">Obstacle Detect</div></div>
+                <div><div class="stat-value">AZ-900</div><div class="stat-label">Azure Certified</div></div>
+            </div>
+            </div>
+            <div class="hero-right reveal">
+            <div class="profile-img-wrapper">
+                <!-- Profile image placeholder (Base64 embedded dummy / dynamic) 
+                We are generating a professional neutral avatar using data:image -->
+                <img src="dp.png"
+                    alt="Swapnil Shinde">
+                <div class="azure-badge"></div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- JOURNEY & EDUCATION (School details added) -->
+    <section id="journey">
+        <div class="container">
+        <span class="section-chip">My Path</span>
+        <h2 class="section-title">Academic Journey & <br>Core Values</h2>
+        <div class="journey-grid">
+            <div class="reveal">
+            <p style="color: var(--text-secondary); margin-bottom: 1.2rem;">From Khandala to AI engineering — I believe in blending sharp technical depth with real-world impact. My work on <strong>AI Trading Bot</strong> and the <strong>Blind Navigator</strong> reflects my passion for solving meaningful problems with intelligent systems.</p>
+            <p style="color: var(--text-secondary);">Freelancing across 5 industries + data science intern experience shaped my full-stack AI mindset — from Python backend to LLM orchestration and PowerBI dashboards that drive decisions.</p>
+            </div>
+            <div class="timeline reveal">
+            <div class="timeline-item">
+                <div class="timeline-year">2022 – Present</div>
+                <div class="timeline-title">AISSMS IOIT, Pune</div>
+                <div style="font-size:0.85rem; color: var(--text-tertiary);">B.Tech Artificial Intelligence & Data Science</div>
+                <span class="timeline-score">GPA: 7.6/10.0</span>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2020 – 2022</div>
+                <div class="timeline-title">Sanjay Ghodawat Junior College, Kolhapur</div>
+                <div style="font-size:0.85rem; color: var(--text-tertiary);">HSC (Class 12) | Score: 88.33%</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2020</div>
+                <div class="timeline-title">K.E.M. School, Khandala</div>
+                <div style="font-size:0.85rem; color: var(--text-tertiary);">SSC (Class 10) | Score: 91.60%</div>
+                <span class="timeline-score">🏆 Top 5% District</span>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- STAR PROJECT: AI Trading Bot -->
+    <section id="trading-bot">
+        <div class="container">
+        <span class="section-chip">⭐ STAR PROJECT</span>
+        <h2 class="section-title">AI Algo-Trading Bot<br><span style="color: var(--violet-accent);">Natural Language → Python → AutoTrade</span></h2>
+        <div class="project-showcase">
+            <div class="reveal">
+            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Write trading strategies in plain English. Our LLM instantly converts them into backtestable Python code, runs against real historical data, and deploys via broker APIs (Zerodha Kite). Auto-trading with zero manual code.</p>
+            <div class="feature-grid">
+                <div class="feature-card">🧠 NLP → Python Code<br><small style="color:var(--text-tertiary)">Prompt engineering + LLM</small></div>
+                <div class="feature-card">📊 Automated Backtesting<br><small>Backtrader, Multi-instrument</small></div>
+                <div class="feature-card">⚡ Live Deployment<br><small>Zerodha Kite API Integration</small></div>
+                <div class="feature-card">📉 Risk Metrics<br><small>Sharpe 1.87, Max DD -8.2%</small></div>
+            </div>
+            <p style="font-size:0.75rem; color: var(--text-tertiary); margin-top: 0.5rem;">Tech stack: Python, LLM, Prompt Engineering, Pandas, Backtrader, Zerodha API</p>
+            </div>
+            <div class="terminal-mock reveal">
+            <div class="terminal-header"><span style="width:12px;height:12px;background:#ff5f56;border-radius:50%"></span><span style="width:12px;height:12px;background:#ffbd2e;border-radius:50%"></span><span style="width:12px;height:12px;background:#27c93f;border-radius:50%"></span><span style="margin-left: auto; font-size:0.6rem;">AI-TRADE v2</span></div>
+            <div class="terminal-body">
+                <div style="background: rgba(0,240,255,0.05); padding: 0.5rem; border-radius: 12px; margin-bottom: 0.8rem;">
+                <span style="color: var(--cyan-glow);">📝 Input (English):</span><br>
+                “Buy RELIANCE when 20EMA crosses above 50EMA. Sell if RSI>75. Backtest Jan-Dec 2023.”
+                </div>
+                <div class="code-block">
+                <pre style="color:#9cdcfe; margin:0; font-family: monospace; font-size: 0.7rem;">def strategy(data):
+        ema20 = EMA(data, 20)
+        ema50 = EMA(data, 50)
+        if ema20 > ema50:
+            market_order("BUY", "RELIANCE")
+        if RSI(data,14) > 75:
+            market_order("SELL")</pre>
+                </div>
+                <div style="display: flex; gap: 0.8rem; margin-top: 1rem; justify-content: space-between;">
+                <div><span style="color: var(--cyan-glow);">📈 Returns:</span> +23.4%</div>
+                <div><span style="color: var(--cyan-glow);">📉 Max DD:</span> -8.2%</div>
+                <div><span style="color: var(--cyan-glow);">🔁 Sharpe:</span> 1.87</div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- FINAL YEAR PROJECT: Blind Navigator (Robo Stick + LLM) -->
+    <section id="blindnav">
+        <div class="container">
+        <span class="section-chip">🎓 FINAL YEAR PROJECT</span>
+        <h2 class="section-title">Blind Navigator — AI Assistive Device</h2>
+        <div class="project-showcase" style="grid-template-columns: 1fr 0.9fr;">
+            <div class="reveal">
+            <p style="color:var(--text-secondary)">A robotic smart cane with integrated camera, ESP32 sensor fusion, and onboard RAG-powered LLM. Visually impaired users can ask natural questions through earbuds: <strong>"What is in front of me?"</strong> — the device responds with real-time obstacle classification and navigation guidance.</p>
+            <ul style="margin: 1.5rem 0 0 1.2rem; color: var(--text-secondary);">
+                <li>✅ YOLO + Ultrasonic/IR fusion → <strong>95% obstacle recognition accuracy</strong></li>
+                <li>✅ RAG-LLM pipeline for voice Q&A (contextual awareness)</li>
+                <li>✅ Haptic + voice-guided alerts → reduced false positives by ~30%</li>
+                <li>✅ ESP32 real-time edge processing + wheeled autonomous chassis</li>
+            </ul>
+            <div class="blind-stats">
+                <div class="blind-stat"><div style="font-weight:800;color:var(--violet-accent)">95%</div><div style="font-size:0.7rem;">Accuracy</div></div>
+                <div class="blind-stat"><div style="font-weight:800;color:var(--violet-accent)">30%</div><div style="font-size:0.7rem;">Fewer FP alerts</div></div>
+            </div>
+            </div>
+            <div class="reveal" style="background: var(--bg-surface); border-radius: 28px; padding: 2rem; border: 1px solid var(--border-subtle); text-align: center;">
+            <div style="font-size: 5rem;">🦯🤖</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin: 1rem 0;">
+                <span class="skill-tag">YOLOv8</span><span class="skill-tag">OpenCV</span><span class="skill-tag">ESP32</span><span class="skill-tag">RAG+LLM</span><span class="skill-tag">Sensor Fusion</span><span class="skill-tag">Haptics</span>
+            </div>
+            <p style="font-size: 0.8rem;">Live demo: "Ask me about path ahead" → LLM interprets scene & provides audio guidance in real-time.</p>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- FREELANCE CARDS -->
+    <section id="freelance">
+        <div class="container">
+        <span class="section-chip">💼 Freelance Experience</span>
+        <h2 class="section-title">Client Impact</h2>
+        <div class="freelance-grid">
+            <div class="service-card reveal"><div style="font-size:2rem;">🌍</div><h3 style="margin:0.5rem 0">PurePort</h3><div style="color:var(--cyan-glow); font-size:0.8rem;">Export Business Platform</div><p style="color:var(--text-secondary); margin-top:0.5rem;">Complete international e-commerce website, order management, payment gateway & admin dashboard.</p><div style="margin-top:1rem"><span class="skill-tag">React</span><span class="skill-tag">Node.js</span><span class="skill-tag">PostgreSQL</span></div></div>
+            <div class="service-card reveal"><div style="font-size:2rem;">🎪</div><h3 style="margin:0.5rem 0">Event Management</h3><div style="color:var(--cyan-glow); font-size:0.8rem;">High-engagement website</div><p style="color:var(--text-secondary); margin-top:0.5rem;">Dynamic event listings, RSVP system, photo gallery, 30% faster loading than previous version.</p><div class="skill-tag">HTML/CSS</div><div class="skill-tag">JS</div><div class="skill-tag">Performance</div></div>
+            <div class="service-card reveal"><div style="font-size:2rem;">📊</div><h3 style="margin:0.5rem 0">Data Analytics</h3><div style="color:var(--cyan-glow); font-size:0.8rem;">PowerBI Dashboards</div><p style="color:var(--text-secondary); margin-top:0.5rem;">Interactive BI dashboards for retail/finance, reduced manual reporting effort by 40%.</p><div class="skill-tag">PowerBI</div><div class="skill-tag">Tableau</div><div class="skill-tag">SQL</div></div>
+        </div>
+        </div>
+    </section>
+
+    <!-- SKILLS Bento Grid with comprehensive list+proficiencies -->
+    <section id="skills">
+        <div class="container">
+        <span class="section-chip">⚙️ Technical Arsenal</span>
+        <h2 class="section-title">Bento Skills</h2>
+        <div class="skills-bento">
+            <div class="skill-category reveal"><h3 style="margin-bottom:1rem">🧠 Programming & AI</h3><div><span class="skill-tag">Python</span><span class="skill-tag">SQL</span><span class="skill-tag">C++</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Pandas/NumPy</span><span class="skill-tag">Scikit-Learn</span><span class="skill-tag">LLM/RAG</span><span class="skill-tag">Prompt Engineering</span><span class="skill-tag">Generative AI</span><span class="skill-tag">Agentic AI</span><span class="skill-tag">NLTK</span></div></div>
+            <div class="skill-category reveal"><h3 style="margin-bottom:1rem">🌐 Web & Cloud</h3><div><span class="skill-tag">React</span><span class="skill-tag">REST APIs</span><span class="skill-tag">HTML/CSS</span><span class="skill-tag">Azure (AZ-900)</span><span class="skill-tag">AWS Basics</span><span class="skill-tag">Docker</span><span class="skill-tag">Git/GitHub</span></div></div>
+            <div class="skill-category reveal"><h3 style="margin-bottom:1rem">📡 IoT & Edge AI</h3><div><span class="skill-tag">ESP32</span><span class="skill-tag">YOLO</span><span class="skill-tag">OpenCV</span><span class="skill-tag">Sensor Fusion</span><span class="skill-tag">MQTT</span></div></div>
+            <div class="skill-category reveal"><h3 style="margin-bottom:1rem">📈 Data & Marketing</h3><div><span class="skill-tag">Power BI</span><span class="skill-tag">Tableau</span><span class="skill-tag">Meta Ads</span><span class="skill-tag">Performance Marketing</span><span class="skill-tag">MySQL/PostgreSQL</span></div></div>
+        </div>
+        </div>
+    </section>
+
+    <!-- CONTACT + Formspree with success animation -->
+    <section id="contact">
+        <div class="container">
+        <div class="contact-form-card">
+            <span class="section-chip" style="display:table; margin:0 auto 1rem auto;">📬 Connect</span>
+            <h2 class="section-title" style="text-align:center;">Send a Message</h2>
+            <div id="form-container">
+            <form id="contact-form" action="https://formspree.io/f/xqazgwpb" method="POST">
+                <input type="hidden" name="_to" value="swapnilshinde33777@gmail.com">
+                <input type="hidden" name="_replyto" value="swapnilshinde33777@gmail.com">
+                <div class="form-group"><input type="text" name="name" placeholder="Full Name" required></div>
+                <div class="form-group"><input type="email" name="email" placeholder="Email Address" required></div>
+                <div class="form-group"><select name="project_type"><option>Select project type</option><option>AI / ML Model</option><option>Algo-Trading Bot</option><option>Web Development</option><option>Data Analytics</option><option>Other</option></select></div>
+                <div class="form-group"><textarea rows="4" name="message" placeholder="Tell me about your vision..."></textarea></div>
+                <button type="submit" class="submit-btn" id="submitBtn"><span id="btnText">Send Message →</span></button>
+            </form>
+            </div>
+            <div id="successMsg" class="success-message">
+            <div style="font-size:3rem;">✨</div>
+            <h3>Message Delivered!</h3>
+            <p>I'll get back to you within 24 hours. Thanks for reaching out.</p>
+            </div>
+            <div class="social-links">
+            <a href="https://www.linkedin.com/in/swapnil-shinde-9b921524a/" target="_blank">🔗 LinkedIn</a>
+            <a href="https://github.com/SwapnilMaheshShinde" target="_blank">🐙 GitHub</a>
+            <a href="mailto:swapnilshinde33777@gmail.com">✉️ swapnilshinde33777@gmail.com</a>
+            <a>📞 +91 9579119759</a>
+            </div>
+        </div>
+        </div>
+    </section>
+    <footer>© 2025 Swapnil Shinde — AI & Data Science Engineer. Built with ❤️ and Tailwind spirit.</footer>
+    </main>
+
+    <script>
+    // Particle network background (parallax effect)
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth, height = window.innerHeight;
+    let particles = [];
+    function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        initParticles(70);
+    }
+    function initParticles(n) {
+        particles = [];
+        for (let i = 0; i < n; i++) {
+        particles.push({ x: Math.random() * width, y: Math.random() * height, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25, radius: Math.random() * 2 + 1 });
+        }
+    }
+    function drawParticles() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+        for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.6)';
+        ctx.fill();
+        for (let j = i + 1; j < particles.length; j++) {
+            let q = particles[j];
+            const dx = p.x - q.x, dy = p.y - q.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 100) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.strokeStyle = `rgba(0, 240, 255, ${0.08 * (1 - dist / 100)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+            }
+        }
+        }
+        requestAnimationFrame(drawParticles);
+    }
+    window.addEventListener('resize', () => { resizeCanvas(); });
+    resizeCanvas();
+    drawParticles();
+
+    // Parallax: move canvas on scroll
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        canvas.style.transform = `translateY(${scrollY * 0.1}px)`;
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // Form submission + success animation and actual email delivery via Formspree
+    const form = document.getElementById('contact-form');
+    const formContainer = document.getElementById('form-container');
+    const successDiv = document.getElementById('successMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        btnText.innerText = 'Sending...';
+        const formData = new FormData(form);
+        try {
+            const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+            });
+            if (response.ok) {
+            formContainer.style.display = 'none';
+            successDiv.style.display = 'block';
+            } else {
+            alert("Oops! Something went wrong. Please email me directly: swapnilshinde33777@gmail.com");
+            submitBtn.disabled = false;
+            btnText.innerText = 'Send Message →';
+            }
+        } catch (err) {
+            alert("Network issue. Please email me at swapnilshinde33777@gmail.com");
+            submitBtn.disabled = false;
+            btnText.innerText = 'Send Message →';
+        }
+        });
+    }
+    </script>
+    </body>
+    </html>
